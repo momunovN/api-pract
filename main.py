@@ -3,9 +3,9 @@ from pydantic import BaseModel
 from datetime import date
 
 app = FastAPI(
-    title="Название",
-    description="API",
-    version="1.0.0"
+    title="Момунов",
+    description="Апи на практике",
+    version="0.5.2"
 )
 
 # Data models
@@ -36,7 +36,7 @@ class Car(BaseModel):
     body_type: str
     salon: str
     tank_capacity: float
-    cruise_control: bool  # Changed from Boolean to bool
+    cruise_control: bool
     maximum_speed: float
     fuel_consumption: float
     colors_id: int
@@ -49,6 +49,7 @@ users = []
 orders = []
 cars = []
 
+# User endpoints
 @app.get("/users")
 def get_users():
     return users
@@ -74,7 +75,31 @@ def delete_user(user_id: int):
             return {"message": "Пользователь удален", "item": removed_user}
     return {"message": "Пользователь не найден"}
 
-# Similar endpoints for orders and cars can be created using the same pattern
+# Car endpoints
+@app.get("/cars")
+def get_cars():
+    return cars
+
+@app.post("/cars")
+def add_car(car: Car):
+    cars.append(car)
+    return {"message": "Автомобиль добавлен"}
+
+@app.put("/cars/{car_id}")
+def update_car(car_id: int, car: Car):
+    for index, existing_car in enumerate(cars):
+        if existing_car.id == car_id:
+            cars[index] = car
+            return {"message": "Автомобиль обновлен", "item": car}
+    return {"message": "Автомобиль не найден"}
+
+@app.delete("/cars/{car_id}")
+def delete_car(car_id: int):
+    for index, existing_car in enumerate(cars):
+        if existing_car.id == car_id:
+            removed_car = cars.pop(index)
+            return {"message": "Автомобиль удален", "item": removed_car}
+    return {"message": "Автомобиль не найден"}
 
 @app.get("/contacts")
 def get_contacts():
