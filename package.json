@@ -1,0 +1,6 @@
+   {
+     "scripts": {
+       "dev": "cross-env uvicorn main:app --reload"
+     }
+   }
+   
